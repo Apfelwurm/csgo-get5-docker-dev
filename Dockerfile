@@ -4,7 +4,7 @@
 ##  Docker image containing CSGO with Get5   ##
 ##      plugin for setting up matches        ##
 ###############################################
-#    github.com/theo-brown/csgo-get5docker    #
+#    github.com/Apfelwurm/csgo-get5docker    #
 ###############################################
 
 FROM debian:buster-slim

@@ -11,12 +11,12 @@
     </em>
 </p>
 <p align="center">
-    <a href="https://github.com/theo-brown/csgo-get5-docker/blob/main/LICENSE">
-        <img src="https://img.shields.io/github/license/theo-brown/csgo-get5-docker">
+    <a href="https://github.com/Apfelwurm/csgo-get5-docker/blob/main/LICENSE">
+        <img src="https://img.shields.io/github/license/Apfelwurm/csgo-get5-docker">
     </a>
     <img src="https://img.shields.io/maintenance/no/2022">
-    <a href="https://github.com/theo-brown/csgo-get5-docker/actions/workflows/check-latest-csgo-version.yml">
-        <img src="https://github.com/theo-brown/csgo-get5-docker/actions/workflows/check-latest-csgo-version.yml/badge.svg">
+    <a href="https://github.com/Apfelwurm/csgo-get5-docker/actions/workflows/check-latest-csgo-version.yml">
+        <img src="https://github.com/Apfelwurm/csgo-get5-docker/actions/workflows/check-latest-csgo-version.yml/badge.svg">
     </a>
 </p>
 
@@ -330,7 +330,7 @@ log the output to `/home/myuser/csgo-get5-docker/cron.log`.
 
 #### 5.2.2 Version on DockerHub
 
-The workflow ["Uses latest CS:GO version"](https://github.com/theo-brown/csgo-get5-docker/actions/workflows/check-csgo-version.yml)
+The workflow ["Uses latest CS:GO version"](https://github.com/Apfelwurm/csgo-get5-docker/actions/workflows/check-csgo-version.yml)
 checks that the version of CSGO on the image in the DockerHub registry matches the latest CS:GO patch released on Steam.
 
 The script `image_update/update-image-remote.sh` is run remotely to periodically check for CS:GO updates and keep the 
