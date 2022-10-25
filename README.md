@@ -42,7 +42,7 @@ For further information please read [the docs](https://splewis.github.io/get5/de
 
 ### 2.1 Quickstart
 
-1. Download the image from [Docker hub](https://hub.docker.com/r/Apfelwurm/csgo-get5-docker-dev):
+1. Download the image from [Docker hub](https://hub.docker.com/r/apfelwurm/csgo-get5-docker-dev):
 ```
 docker pull apfelwurm/csgo-get5-docker-dev:latest
 ```
