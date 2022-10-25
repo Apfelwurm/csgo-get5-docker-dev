@@ -16,6 +16,12 @@
     </a>
     <a href="https://github.com/Apfelwurm/csgo-get5-docker-dev/actions/workflows/check-latest-csgo-version.yml">
         <img src="https://github.com/Apfelwurm/csgo-get5-docker-dev/actions/workflows/check-latest-csgo-version.yml/badge.svg">
+    </a>    
+    <a href="https://github.com/Apfelwurm/csgo-get5-docker-dev/actions/workflows/update.yml">
+        <img src="https://github.com/Apfelwurm/csgo-get5-docker-dev/actions/workflows/update.yml/badge.svg">
+    </a>
+    <a href="https://github.com/Apfelwurm/csgo-get5-docker-dev/actions/workflows/build.yml">
+        <img src="https://github.com/Apfelwurm/csgo-get5-docker-dev/actions/workflows/build.yml/badge.svg">
     </a>
 </p>
 

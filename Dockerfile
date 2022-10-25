@@ -1,5 +1,5 @@
 #######################################################
-#        csgo-get5-docker-dev Dockerfile                  #
+#        csgo-get5-docker-dev Dockerfile              #
 #######################################################
 ##  Dev Docker image containing CSGO srcds with Get5 ##
 #######################################################
