@@ -1,4 +1,4 @@
-name: Uses latest CS:GO version
+name: Build image from scratch
 
 on:
   push:

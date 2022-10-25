@@ -1,4 +1,4 @@
-name: Uses latest CS:GO version
+name: check for latest CS:GO version
 
 on:
   # Run at 37 minutes past every hour
