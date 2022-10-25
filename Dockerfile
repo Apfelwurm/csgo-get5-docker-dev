@@ -16,11 +16,11 @@ FROM debian:buster-slim
 # curl -s "http://api.steampowered.com/ISteamApps/UpToDateCheck/v1?appid=730&version=0" | jq .response.required_version
 ARG CSGO_VERSION=13845
 LABEL csgo_version=$CSGO_VERSION
-LABEL org.label-schema.schema-version="1.0" `
-      org.label-schema.url="https://volzit.de" `
-      org.label-schema.vcs-ref=$SOURCE_COMMIT `
-      org.label-schema.vendor="volzit" `
-      org.label-schema.description="Docker image for deploying a dev CS:GO server for Get5" `
+LABEL org.label-schema.schema-version="1.0" \
+      org.label-schema.url="https://volzit.de" \
+      org.label-schema.vcs-ref=$SOURCE_COMMIT \
+      org.label-schema.vendor="volzit" \
+      org.label-schema.description="Docker image for deploying a dev CS:GO server for Get5" \
       org.label-schema.vcs-url="https://github.com/Apfelwurm/csgo-get5-docker"
 
 ###############
