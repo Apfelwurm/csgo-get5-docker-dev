@@ -3,75 +3,47 @@
     <img src=".readme/docker.png" height=50px align="absmiddle">
 </h1>
 <h1 align="center">
-    csgo-get5-docker
+    csgo-get5-docker-dev
 </h1>
 <p align="center">
     <em>
-        Quickly deploy a dedicated CS:GO server for a competitive match
+        Development container for get5
     </em>
 </p>
 <p align="center">
-    <a href="https://github.com/Apfelwurm/csgo-get5-docker/blob/main/LICENSE">
-        <img src="https://img.shields.io/github/license/Apfelwurm/csgo-get5-docker">
+    <a href="https://github.com/Apfelwurm/csgo-get5-docker-dev/blob/main/LICENSE">
+        <img src="https://img.shields.io/github/license/Apfelwurm/csgo-get5-docker-dev">
     </a>
-    <img src="https://img.shields.io/maintenance/no/2022">
-    <a href="https://github.com/Apfelwurm/csgo-get5-docker/actions/workflows/check-latest-csgo-version.yml">
-        <img src="https://github.com/Apfelwurm/csgo-get5-docker/actions/workflows/check-latest-csgo-version.yml/badge.svg">
+    <a href="https://github.com/Apfelwurm/csgo-get5-docker-dev/actions/workflows/check-latest-csgo-version.yml">
+        <img src="https://github.com/Apfelwurm/csgo-get5-docker-dev/actions/workflows/check-latest-csgo-version.yml/badge.svg">
     </a>
 </p>
 
-## Contents
-
-1. [Introduction](#1-introduction)
-
-2. [Using the image](#2-using-the-image)
-
-    2.1 [Quickstart](#21-quickstart)
-
-    2.2 [Recommended Docker launch arguments](#22-recommended-docker-launch-arguments)
-
-    2.3 [Examples](#23-examples)
-
-3. [Environment variables](#3-environment-variables)
-
-4. [Using Get5 for match creation](#4-using-get5-for-match-creation)
-
-    4.1 [Match config schema](#41-match-config-schema)
-
-    4.2 [Team schema](#42-team-schema)
-
-5. [Keeping the image up to date](#5-keeping-the-image-up-to-date)
-
-   5.1 [Updates on launch](#51-updates-on-launch)
-
-   5.2 [Scheduled and manual updates](#52-scheduled-and-manual-updates)
-
-
 ## 1. Introduction
 
-This image aims to provide a CS:GO server that can **run a competitive match straight out of the box**, with no setup
-required beyond setting the match parameters.
+This image aims to provide a CS:GO server to develop and test [get5](https://github.com/splewis/get5). 
+
+Do not use this in production to run your matches!
 
 Everything that can be changed about the server can be **set using environment variables** passed to Docker on container
 creation.
 
-[Get5](https://github.com/splewis/get5) is used to set up and manage the match - for further information as to how it 
-works please read [Using Get5 for match creation](#using-get5-for-match-creation). If you need more detail have a look 
-at the [Get5 documentation](https://github.com/splewis/get5).
+If you want to use your local build you have to build it first using [this instructions](https://splewis.github.io/get5/dev/developers/#build)
 
+For further information please read [the docs](https://splewis.github.io/get5/dev/). 
 
 ## 2. Using the image
 
 ### 2.1 Quickstart
 
-1. Download the image from [Docker hub](https://hub.docker.com/r/theobrown/csgo-get5-docker):
+1. Download the image from [Docker hub](https://hub.docker.com/r/Apfelwurm/csgo-get5-docker-dev):
 ```
-docker pull theobrown/csgo-get5-docker:latest
+docker pull apfelwurm/csgo-get5-docker-dev:latest
 ```
 
 2. Launch a container:
 ```
-docker run --network=host theobrown/csgo-get5-docker:latest
+docker run --network=host apfelwurm/csgo-get5-docker-dev:latest
 ```
 
 ### 2.2 Recommended Docker launch arguments
@@ -81,14 +53,7 @@ At minimum, you'll probably want to launch the container with the following envi
 * `--network=host`: use the host machine's ports and IP address, rather than running within an isolated Docker 
   network that's not visible to the outside world.
 
-* `-e PASSWORD=<some password>`: set the password to connect to the server.
-
 * `-e RCON_PASSWORD=<some other password>`: set the RCON (admin) password.
-
-* `-e GOTV_PASSWORD=<another password>`: set the GOTV password.
-
-* `-e SERVER_TOKEN=<your GSLT>`: set a Game Server Login Token so that the server can be connected to by 
-  non-LAN clients (see [below](#3-environment-variables)).
 
 If you want to start the server with a loaded config, set:
 
@@ -96,56 +61,36 @@ If you want to start the server with a loaded config, set:
 
 ### 2.3 Examples
 
-#### 2.3.1 Starting a server with no match config (BO1 only)
+#### 2.3.1 Starting a server with no match config with your local get5 development build
 
 Start a server with:
 - The host machine's IP address 
-- The specified port, GOTV port, password, RCON password, GOTV password, and server token
+- The specified port, GOTV port, password, RCON password, GOTV password
 
 ```
-docker run --network=host \
+docker run --rm -it --network=host \
  -e PORT=1234 \
- -e GOTV_PORT=1235
+ -e GOTV_PORT=1235 \
  -e PASSWORD=mypass \
  -e RCON_PASSWORD=adminpass \
  -e GOTV_PASSWORD=gotvpass \
- -e SERVER_TOKEN=A1B2C3D4E5F6G7H8I9J0 \
- theobrown/csgo-get5-docker:latest
+ -e GET5_VER=LOCAL\
+ -v $PWD/builds/get5:/localmounts/get5 \
+ apfelwurm/csgo-get5-docker-dev:latest
 ```
 
-Any player can connect to the server.
-Once players are connected, to start a match, run the following in the in-game console: 
-1. Set the rcon password to the one set in the Docker launch command, e.g. `rcon_password adminpass`
-2. Set the map to the desired map using rcon and SourceMod commands, e.g. `rcon sm_map de_dust2`
-3. Start the match using `rcon get5_creatematch`
-
-Once the players ready up, the game will begin.
-
-If the host machine had public IP `251.131.41.166` and port 1234 was visible to the outside world then running the 
-following command in the CS:GO in-game console would connect to the server:
-```
-connect 251.131.41.166:1234; password mypass 
-```
-
-Running the following command in the CS:GO in-game console would connect to the GOTV stream:
-```
-connect 251.131.41.166:1235; password gotvpass
-```
-
-#### 2.3.2 Starting a server with a match config and in-server veto
+#### 2.3.2 Starting a server with a match config
 
 Start a server with:
 - The host machine's IP address 
-- The specified port, GOTV port, password, RCON password, GOTV password, and server token 
+- The specified port, GOTV port, password, RCON password, GOTV password
 - The given Get5 config loaded
 
-Once the players are connected and ready up, the map veto will start. Once the veto is complete, the game will begin.
 ```
-docker run --network=host \
+docker run --rm -it --network=host \
  -e PASSWORD=mypass \
  -e RCON_PASSWORD=adminpass \
  -e GOTV_PASSWORD=gotvpass \
- -e SERVER_TOKEN=A1B2C3D4E5F6G7H8I9J0 \
  -e MATCH_CONFIG="{'matchid': '81a99ef9a2844c278c2bda2f5a77a793', \
                    'num_maps': 3, \
                    'maplist': ['de_dust2', 'de_inferno', 'de_mirage', 'de_nuke', 'de_overpass', 'de_train', 'de_vertigo'], \
@@ -164,58 +109,25 @@ docker run --network=host \
                                          186841562108230104: 'electronic', \
                                          726408891643982724: 'Perfecto', \
                                          512316566954794515: 'flamie'}}}" \
- theobrown/csgo-get5-docker:latest
+ apfelwurm/csgo-get5-docker-dev:latest
 ```
-
-#### 2.3.3 Starting a server with a match config with preset maps
-
-Start a server with:
-- The host machine's IP address 
-- The specified port, GOTV port, password, RCON password, GOTV password, and server token 
-- The given Get5 config loaded
-
-Once the players are connected and ready up, the game will begin.
-
-```
-docker run --network=host \
- -e PASSWORD=mypass \
- -e RCON_PASSWORD=adminpass \
- -e GOTV_PASSWORD=gotvpass \
- -e SERVER_TOKEN=A1B2C3D4E5F6G7H8I9J0 \
- -e MATCH_CONFIG="{'matchid': '81a99ef9a2844c278c2bda2f5a77a793', \
-                   'num_maps': 3, \
-                   'maplist': ['de_dust2', 'de_inferno', 'de_overpass'], \
-                   'skip_veto': True, \
-                   'map_sides': ['team1_ct', 'team2_ct', 'knife'], \
-                   'team1': {'name': 'Astralis', \
-                             'tag': 'AST', \
-                             'players': {698652696634933762: 'gla1ve', \
-                                         234783204182937471: 'Magisk', \
-                                         389371614622221912: 'dev1ce', \
-                                         951311418417028314: 'dupreeh', \
-                                         369417162788295143: 'Xyp9x'}}, \
-                   'team2': {'name': 'Natus Vincere', \
-                             'tag': 'NAVI', \
-                             'players': {875407653610178066: 's1mple', \
-                                         979550479724346962: 'Boombl4', \
-                                         186841562108230104: 'electronic', \
-                                         726408891643982724: 'Perfecto', \
-                                         512316566954794515: 'flamie'}}}" \
- theobrown/csgo-get5-docker:latest
-```
-
 
 ## 3. Environment variables
 
 Setting environment variables when starting a container allows you to manipulate the launch options of the server.
 
-For example, `docker run -e PASSWORD=1234 theobrown/csgo-server:latest` will start a new server with password `1234` 
+For example, `docker run -e PASSWORD=1234 Apfelwurm/csgo-server:latest` will start a new server with password `1234` 
 by launching the server with `+sv_password 1234`. 
 
 All possible environment variables are displayed in the table below.
 
 | Variable name            | Launch option               | Description                                                                            
 | :----------------------- | :-------------------------- | :-------------------------------
+| STEAMWORKS_VER           |                             | This determinates which [steamworks](https://github.com/KyleSanderson/SteamWorks/) version will be installed on the startup. This can either be a version (like `1.2.3c` ) or a url to a tgz file (like `https://github.com/KyleSanderson/SteamWorks/releases/download/1.2.3c/package-lin.tgz`) or `LOCAL`. If you set it to `LOCAL`, you can use the corresponding mountpoint ( see [below](#4-mountpoints) ) to mount an extracted version. (for current default, look into the dockerfile)
+| METAMOD_VER              |                             | This determinates which [metamod](http://www.metamodsource.net/) version will be installed on the startup. This can either be a version (like `1.12` ) or a url to a tar.gz file (like `https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1148-linux.tar.gz`) or `LOCAL`. If you set it to `LOCAL`, you can use the corresponding mountpoint ( see [below](#4-mountpoints) ) to mount an extracted version. (for current default, look into the dockerfile)
+| SOURCEMOD_VER            |                             | This determinates which [sourcemod](https://www.sourcemod.net/) version will be installed on the startup. This can either be a version (like `1.11` ) or a url to a tar.gz file (like `https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6915-linux.tar.gz`) or `LOCAL`. If you set it to `LOCAL`, you can use the corresponding mountpoint ( see [below](#4-mountpoints) ) to mount an extracted version. (for current default, look into the dockerfile)
+| GET5_VER                 |                             | This determinates which [get5](https://github.com/splewis/get5) version will be installed on the startup. This can either be a version (like `0.10.5` ) or a url to a tar.gz file (like `https://github.com/splewis/get5/releases/download/v0.10.5/get5-v0.10.5.tar.gz`) or `LATEST` for the latest stable version, `LATEST-PRE` for the latest nightly or `LOCAL`. If you set it to `LOCAL`, you can use the corresponding mountpoint ( see [below](#4-mountpoints) ) to mount an extracted version. (for current default, look into the dockerfile)
+| GET5_APISTATS            |                             | This determinates which apistats plugin should be activated on the startup. you can set this to `get5_apistats` or `get5_mysqlstats` or your own plugins name (must be contained in the local / downloaded get5 folder). Alternativeley you can set it to `LOCAL`, you can use the corresponding mountpoint ( see [below](#4-mountpoints) ) to mount an extracted version (default: false)
 | SERVER_TOKEN             | `+sv_setsteamaccount`       | The Steam Game Server Login Token for this instance, required for the server to be accessible to non-LAN connections. Generate one [here](https://steamcommunity.com/dev/managegameservers) (default: not set, ie LAN connections only).
 | PASSWORD                 | `+sv_password`              | Password required to connect to the server (default: not set)
 | RCON_PASSWORD            | `+rcon_password`            | Password required to establish an RCON (remote console) connection to the server (default: not set)
@@ -234,7 +146,7 @@ All possible environment variables are displayed in the table below.
 | AUTOEXEC                 | `+exec`                     | A `.cfg` file to be executed on startup. Note anything you set here will probably be overwritten by Get5 when a match is loaded, so it's fairly useless (default: not set).
 | UPDATE_ON_LAUNCH         | `-autoupdate`               | 1: Check for CS:GO updates on container launch, 0: do not check for updates. (default: 1)
 | CUSTOM_ARGS              |                             | A string containing any additional launch options to pass to the dedicated server (default: not set)
-| MATCH_CONFIG             |                             | If set to a valid JSON match config, the server starts with the config loaded. If not set, the server starts with `get5_check_auths 0`. [See below](#using-get5-for-match-creation) for more on using Get5. (Default: not set.)
+| MATCH_CONFIG             |                             | If set to a valid JSON match config, the server starts with the config loaded. (#using-get5-for-match-creation) for more on using Get5. (Default: not set.)
 
 
 Launch options are appended to the following set of basic launch options that are passed as arguments to `srcds`, the 
@@ -242,55 +154,18 @@ dedicated server program:
 ```
 -game csgo -console -usercon -steam_dir $STEAMCMD_DIR -steamcmd_script $STEAMCMD_DIR/steamcmd.sh -ip 0.0.0.0
 ```
+## 4. Mountpoints
 
+| Mountpoint path               | Description                                                                            
+| :-----------------------      | :-------------------------- 
+| /localmounts/servercfg        | If something is in here, the whole content will be copied recursive to the `cfg` folder of the srcds csgo folder and overwrites what is there right before the server starts.
+| /localmounts/get5cfg          | If something is in here, the whole content will be copied recursive to the `addons/sourcemod/configs/get5` folder of the srcds csgo folder and overwrites what is there.
+| /localmounts/steamworks       | If setting `STEAMWORKS_VER` to `LOCAL` the contents of the here mounted subfolder `addons` is copied to the corresponding srcds csgo folder
+| /localmounts/metamod          | If setting `METAMOD_VER` to `LOCAL` the contents of the here mounted folder content is copied to the corresponding srcds csgo folders
+| /localmounts/sourcemod        | If setting `SOURCEMOD_VER` to `LOCAL` the contents of the here mounted folder content is copied to the corresponding srcds csgo folders
+| /localmounts/get5             | If setting `GET5_VER` to `LOCAL` the contents of the here mounted subfolders `addons` and `cfg` are copied to the corresponding srcds csgo folder
+| /localmounts/get5_apistats    | If setting `GET5_APISTATS` to `LOCAL` the contents of the here mounted subfolders `addons` and `cfg` are copied to the corresponding srcds csgo folder
 
-## 4. Using Get5 for match creation
-
-*This section is mostly directly copied from [Get5's README](https://github.com/splewis/get5/blob/master/README.md)*
-
-Get5 uses JSON-formatted objects to create matches. These set the players who are allowed on the server, the maps to be 
-played, the sides, etc.
-
-The image can start a container with or without a match config, by setting the optional environment variable 
-`MATCH_CONFIG` or leaving it unset.
-
-If started with a match config, only the players specified in the config will be able to connect.
-If started with no match config, then any player can connect, and once connected the command `rcon get5_creatematch`
-needs to be run in console to set up a match.
-
-### 4.1 Match Config Schema
-
-Of the below fields, only the team1 and team2 fields are actually required. Reasonable defaults are used for other
-fields (bo3 series, 5v5, empty strings for team names, etc.)
-
-| Element                    | Description 
-| :------------------------- | :--------------------- 
-| `matchid`                  | A string used to identify the match
-| `num_maps`                 | Number of maps in the series. This must be an odd number or 2.
-| `maplist`                  | An odd-length array of strings identifying the maps to use.
-| `skip_veto`                | If true, the veto will be skipped and the maps will come from the maplist in the order given. If false, use Get5's built in veto menu.
-| `veto_first`               | Either `"team1"`, or `"team2"`. If not set, or set to any other value, team 1 will veto first.
-| `side_type`                | Either `"standard"` (team that didn't pick the map chooses which side to start on), `"never_knife"` (team1 starts as CT), or `"always_knife"` (play a knife round at the beginning of each map)
-| `map_sides`                | If `skip_veto` is true, then the starting sides for each map need to be set here in an array of strings. Possible values: `"team1_t"`, `"team1_ct"`, `"team2_t"`, `"team2_ct"`, `"knife"`.
-| `players_per_team`         | Maximum number of players per team, excluding coach (default: 5)
-| `min_players_to_ready`     | Minimum number of connected players a team needs to be able to ready up (default: 1)
-| `favored_percentage_team1` | Predicted percentage probability that team1 win (wrapper for mp_teamprediction_pct), displayed in GOTV.
-| `favored_percentage_text`  | Text to accompany the prediction percentage displayed in GOTV (wrapper for mp_teamprediction_txt)
-| `cvars`                    | Cvars to be set during the match warmup/knife round/live state
-| `spectators`               | See the team schema below (only the players and name sections are used for spectators)
-| `team1`                    | See the team schema below
-| `team2`                    | See the team schema below
-
-### 4.2 Team Schema
-
-| Element        | Description
-| :------------- | :---------------------
-| `name`         | Team name (optional)
-| `tag`          | Team tag - replaces client clan tags (optional)
-| `flag`         | 2 letter country code to set the team's flag (optional)
-| `logo`         | Team logo (optional)
-| `players`      | Either an array of steamIDs or, to override in-game player names, a dictionary of steamIDs to names (**required**)
-| `series_score` | Current score in the series. This can be used to give a team a map advantage (default: 0)
 
 
 ## 5. Keeping the image up to date
@@ -311,7 +186,7 @@ These can be run manually or at scheduled intervals. They run the following step
    running `server-scripts/server-update.sh`, which installs CS:GO updates
 3. The changes to the container are committed to the image and the image label updated to show the version of CS:GO 
    installed 
-4. The image is pushed to the registry (`image_update/update-image-remote.sh` only)
+5. The image is pushed to the registry (`image_update/update-image-remote.sh` only)
 
 The image updater scripts use `jq` to parse JSON objects from the Steam Web API. Install it using `sudo apt install jq`.
 
@@ -323,14 +198,14 @@ For example:
 1. Run `crontab -e` to edit the crontab for the current user 
 2. Add the following line to the opened file: 
 ```bash
-10 * * * * /home/myuser/csgo-get5-docker/update-local-image.sh > /home/myuser/csgo-get5-docker/cron.log
+10 * * * * /home/myuser/csgo-get5-docker-dev/update-local-image.sh > /home/myuser/csgo-get5-docker-dev/cron.log
 ```
-This will run the script `/home/myuser/csgo-get5-docker/update-local-image.sh ` at 10 minutes past the hour every hour, and 
-log the output to `/home/myuser/csgo-get5-docker/cron.log`.
+This will run the script `/home/myuser/csgo-get5-docker-dev/update-local-image.sh ` at 10 minutes past the hour every hour, and 
+log the output to `/home/myuser/csgo-get5-docker-dev/cron.log`.
 
 #### 5.2.2 Version on DockerHub
 
-The workflow ["Uses latest CS:GO version"](https://github.com/Apfelwurm/csgo-get5-docker/actions/workflows/check-csgo-version.yml)
+The workflow ["Uses latest CS:GO version"](https://github.com/Apfelwurm/csgo-get5-docker-dev/actions/workflows/check-csgo-version.yml)
 checks that the version of CSGO on the image in the DockerHub registry matches the latest CS:GO patch released on Steam.
 
 The script `image_update/update-image-remote.sh` is run remotely to periodically check for CS:GO updates and keep the 

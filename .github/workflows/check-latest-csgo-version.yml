@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_REPO: 'theobrown/csgo-get5-docker'
+  DOCKER_REPO: 'apfelwurm/csgo-get5-docker-dev'
 
 jobs:
   check-csgo-version:
@@ -32,8 +32,20 @@ jobs:
           if [ $(echo $VERSION_CHECK | jq .up_to_date) = true ]
           then
             echo "$DOCKER_REPO:latest contains the latest CS:GO version (${{ steps.csgo-version.outputs.version }})."
+            echo "CSVERSION=FALSE" >> $GITHUB_ENV
             exit 0
           else
             echo "::error::$DOCKER_REPO:latest contains an outdated CS:GO version \
                   (installed: ${{ steps.csgo-version.outputs.version }} / latest: $(echo $VERSION_CHECK | jq .required_version))."
+            echo "CSVERSION=$(echo $VERSION_CHECK | jq .required_version)" >> $GITHUB_ENV
           fi
+      - name: checkout
+        if: env.CSVERSION != 'FALSE'
+        uses: actions/checkout@v3
+      - name: Replace Version
+        if: env.CSVERSION != 'FALSE'
+        run: sed -i 's|ARG CSGO_VERSION=.*$|ARG CSGO_VERSION='$BEEEKAT'|g' Dockerfile 
+      - uses: EndBug/add-and-commit@v9 
+        if: env.CSVERSION != 'FALSE'
+        with:
+          message: 'Versionupdate to ${{ env.CSVERSION }}'
