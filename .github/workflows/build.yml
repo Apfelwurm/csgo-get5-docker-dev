@@ -9,7 +9,7 @@ on:
     - 'server-scripts/**'
 
 jobs:
-  check-csgo-version:
+  build-image-from-scratch:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
