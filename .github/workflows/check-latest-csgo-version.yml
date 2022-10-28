@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Replace Version
         if: env.CSVERSION != 'FALSE'
-        run: sed -i 's|ARG CSGO_VERSION=.*$|ARG CSGO_VERSION='$BEEEKAT'|g' Dockerfile 
+        run: sed -i 's|ARG CSGO_VERSION=.*$|ARG CSGO_VERSION='${{ env.CSVERSION }}'|g' Dockerfile 
       - uses: EndBug/add-and-commit@v9 
         if: env.CSVERSION != 'FALSE'
         with:
