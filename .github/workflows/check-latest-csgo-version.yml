@@ -49,3 +49,9 @@ jobs:
         if: env.CSVERSION != 'FALSE'
         with:
           message: 'Versionupdate to ${{ env.CSVERSION }}'
+      - name: trigger update
+        if: env.CSVERSION != 'FALSE'
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          repository: ${{ github.repository }}
+          event-type: update-image

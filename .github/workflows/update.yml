@@ -6,6 +6,8 @@ on:
     - main
     paths:
     - 'Dockerfile'
+  repository_dispatch:
+    types: [update-image]
 
 
 jobs:

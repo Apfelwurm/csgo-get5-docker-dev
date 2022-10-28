@@ -5,8 +5,7 @@ on:
     branches:
     - main
     paths:
-    - 'Dockerfile'
-    - 'server-scripts/**'
+    - '!**'
 
 jobs:
   build-image-from-scratch:
