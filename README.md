@@ -75,8 +75,10 @@ Start a server with:
 
 ```
 docker run --rm -it --network=host \
+ -e GOTV_ENABLE=1 \
  -e PORT=1234 \
  -e GOTV_PORT=1235 \
+ -e GOTV_DELAY=15 \
  -e PASSWORD=mypass \
  -e RCON_PASSWORD=adminpass \
  -e GOTV_PASSWORD=gotvpass \
@@ -94,9 +96,11 @@ Start a server with:
 
 ```
 docker run --rm -it --network=host \
+ -e GOTV_ENABLE=1 \
  -e PASSWORD=mypass \
  -e RCON_PASSWORD=adminpass \
  -e GOTV_PASSWORD=gotvpass \
+ -e GOTV_DELAY=15 \
  -e MATCH_CONFIG="{'matchid': '81a99ef9a2844c278c2bda2f5a77a793', \
                    'num_maps': 3, \
                    'maplist': ['de_dust2', 'de_inferno', 'de_mirage', 'de_nuke', 'de_overpass', 'de_train', 'de_vertigo'], \
@@ -138,8 +142,11 @@ All possible environment variables are displayed in the table below.
 | PASSWORD                 | `+sv_password`              | Password required to connect to the server (default: not set)
 | RCON_PASSWORD            | `+rcon_password`            | Password required to establish an RCON (remote console) connection to the server (default: not set)
 | PORT                     | `-port`                     | Server port (default: 27015)
+| GOTV_ENABLE              | `+tv_enable`                | GOTV Enable (default: 0)
 | GOTV_PORT                | `+tv_port`                  | GOTV port (default: 27020)
 | GOTV_PASSWORD            | `+tv_password`              | GOTV password (default: not set)
+| GOTV_DELAY               | `+tv_delay`                 | GOTV delay (default: 15)
+| GOTV_SNAPSHOTRATE        | `+tv_snapshotrate`          | GOTV Snapshot rate (default: 32)
 | TICKRATE                 | `-tickrate`                 | Server tick rate (64 or 128; default: 128)
 | MAXPLAYERS               | `-maxplayers_override`      | Limit how many players the server can contain (default: 30)
 | GAMETYPE                 | `+game_type`                | Use GAMETYPE and GAMEMODE to set what game mode is played (default: GAMETYPE=0, GAMEMODE=1, which sets game mode to competitive). Note this will be overriden by Get5.
