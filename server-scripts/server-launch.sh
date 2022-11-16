@@ -364,9 +364,21 @@ if [ -v RCON_PASSWORD ]
 then
     ARGS="$ARGS +rcon_password $RCON_PASSWORD"
 fi
+if [ -v GOTV_ENABLE ]
+then
+    ARGS="$ARGS +tv_enable $GOTV_ENABLE"
+fi
 if [ -v GOTV_PASSWORD ]
 then
     ARGS="$ARGS +tv_password $GOTV_PASSWORD"
+fi
+if [ -v GOTV_DELAY ]
+then
+    ARGS="$ARGS +tv_delay $GOTV_DELAY"
+fi
+if [ -v GOTV_SNAPSHOTRATE ]
+then
+    ARGS="$ARGS +tv_snapshotrate $GOTV_SNAPSHOTRATE"
 fi
 if [ -v  PUBLIC_ADDRESS ]
 then
