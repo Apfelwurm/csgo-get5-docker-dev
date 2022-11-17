@@ -39,19 +39,28 @@ jobs:
                   (installed: ${{ steps.csgo-version.outputs.version }} / latest: $(echo $VERSION_CHECK | jq .required_version))."
             echo "CSVERSION=$(echo $VERSION_CHECK | jq .required_version)" >> $GITHUB_ENV
           fi
-      - name: checkout
+      - name: create issue from file
+        uses: JasonEtco/create-an-issue@v2.8.0
+        id: issue
         if: env.CSVERSION != 'FALSE'
-        uses: actions/checkout@v3
-      - name: Replace Version
-        if: env.CSVERSION != 'FALSE'
-        run: sed -i 's|ARG CSGO_VERSION=.*$|ARG CSGO_VERSION='${{ env.CSVERSION }}'|g' Dockerfile 
-      - uses: EndBug/add-and-commit@v9 
-        if: env.CSVERSION != 'FALSE'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEXT_VERSION: ${{ env.CSVERSION }}
         with:
-          message: 'Versionupdate to ${{ env.CSVERSION }}'
-      - name: trigger update
-        if: env.CSVERSION != 'FALSE'
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          repository: ${{ github.repository }}
-          event-type: update-image
+          filename: .github/templates/issue.newversion.md
+      # - name: checkout
+      #   if: env.CSVERSION != 'FALSE'
+      #   uses: actions/checkout@v3
+      # - name: Replace Version
+      #   if: env.CSVERSION != 'FALSE'
+      #   run: sed -i 's|ARG CSGO_VERSION=.*$|ARG CSGO_VERSION='${{ env.CSVERSION }}'|g' Dockerfile 
+      # - uses: EndBug/add-and-commit@v9 
+      #   if: env.CSVERSION != 'FALSE'
+      #   with:
+      #     message: 'Versionupdate to ${{ env.CSVERSION }}'
+      # - name: trigger update
+      #   if: env.CSVERSION != 'FALSE'
+      #   uses: peter-evans/repository-dispatch@v2
+      #   with:
+      #     repository: ${{ github.repository }}
+      #     event-type: update-image

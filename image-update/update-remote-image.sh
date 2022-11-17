@@ -70,7 +70,7 @@ else
     docker rm -f csgo_update_container
 
     REGISTRY_CSGO_VERSION=$(get_registry_csgo_version)
-    if [ ! $(check_csgo_version $REGISTRY_CSGO_VERSION) ]
+    if [ $(check_csgo_version $REGISTRY_CSGO_VERSION) != 0 ]
     then
         echo "Update check failed: registry still does not have latest CSGO version"
         exit 1
