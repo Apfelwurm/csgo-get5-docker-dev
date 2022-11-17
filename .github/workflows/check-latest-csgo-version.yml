@@ -14,6 +14,10 @@ jobs:
   check-csgo-version:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
       - name: Fetch metadata from DockerHub
         id: fetch-metadata
         uses: theo-brown/fetch-dockerhub-metadata@v1
@@ -48,16 +52,16 @@ jobs:
           NEXT_VERSION: ${{ env.CSVERSION }}
         with:
           filename: .github/templates/issue.newversion.md
-      # - name: checkout
-      #   if: env.CSVERSION != 'FALSE'
-      #   uses: actions/checkout@v3
-      # - name: Replace Version
-      #   if: env.CSVERSION != 'FALSE'
-      #   run: sed -i 's|ARG CSGO_VERSION=.*$|ARG CSGO_VERSION='${{ env.CSVERSION }}'|g' Dockerfile 
-      # - uses: EndBug/add-and-commit@v9 
-      #   if: env.CSVERSION != 'FALSE'
-      #   with:
-      #     message: 'Versionupdate to ${{ env.CSVERSION }}'
+      - name: checkout
+        if: env.CSVERSION != 'FALSE'
+        uses: actions/checkout@v3
+      - name: Replace Version
+        if: env.CSVERSION != 'FALSE'
+        run: sed -i 's|ARG CSGO_VERSION=.*$|ARG CSGO_VERSION='${{ env.CSVERSION }}'|g' Dockerfile 
+      - uses: EndBug/add-and-commit@v9 
+        if: env.CSVERSION != 'FALSE'
+        with:
+          message: 'Versionupdate to ${{ env.CSVERSION }}'
       # - name: trigger update
       #   if: env.CSVERSION != 'FALSE'
       #   uses: peter-evans/repository-dispatch@v2
