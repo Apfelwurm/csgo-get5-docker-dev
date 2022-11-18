@@ -222,3 +222,5 @@ The workflow ["Uses latest CS:GO version"](https://github.com/Apfelwurm/csgo-get
 checks that the version of CSGO on the image in the DockerHub registry matches the latest CS:GO patch released on Steam. If the versions missmatch, a issue is created here.
 
 I run the `image_update/update-image-remote.sh` locally if nessecary and as soon as the docker hub is updated, i'll close the corresponding issue.
+
+So if the image is already updated (which should happen soon after the release), you can simply run docker pull `apfelwurm/csgo-get5-docker-dev:latest` again to update.
