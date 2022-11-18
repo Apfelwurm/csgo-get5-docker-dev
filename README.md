@@ -219,7 +219,6 @@ log the output to `/home/myuser/csgo-get5-docker-dev/cron.log`.
 #### 5.2.2 Version on DockerHub
 
 The workflow ["Uses latest CS:GO version"](https://github.com/Apfelwurm/csgo-get5-docker-dev/actions/workflows/check-csgo-version.yml)
-checks that the version of CSGO on the image in the DockerHub registry matches the latest CS:GO patch released on Steam.
+checks that the version of CSGO on the image in the DockerHub registry matches the latest CS:GO patch released on Steam. If the versions missmatch, a issue is created here.
 
-The script `image_update/update-image-remote.sh` is run remotely to periodically check for CS:GO updates and keep the 
-registry image up to date. The update-push process can take a while, so it may be a little delayed.
+I run the `image_update/update-image-remote.sh` locally if nessecary and as soon as the docker hub is updated, i'll close the corresponding issue.
