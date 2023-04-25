@@ -14,7 +14,7 @@ FROM debian:buster-slim
 # Label this image with the image version and installed CSGO version
 # To get the version of the latest CSGO patch, run
 # curl -s "http://api.steampowered.com/ISteamApps/UpToDateCheck/v1?appid=730&version=0" | jq .response.required_version
-ARG CSGO_VERSION=13857
+ARG CSGO_VERSION=13869
 LABEL csgo_version=$CSGO_VERSION
 LABEL org.label-schema.schema-version="1.0" \
       org.label-schema.url="https://volzit.de" \
