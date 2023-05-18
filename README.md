@@ -49,12 +49,14 @@ docker pull apfelwurm/csgo-get5-docker-dev:latest
 
 2. Launch a container:
 ```
-docker run --network=host apfelwurm/csgo-get5-docker-dev:latest
+docker run --rm -it --network=host apfelwurm/csgo-get5-docker-dev:latest
 ```
 
 ### 2.2 Recommended Docker launch arguments
 
 At minimum, you'll probably want to launch the container with the following environment variables set:
+
+* `-it`: run the container interactive. There will be problems if you don't run it interactiveley.
 
 * `--network=host`: use the host machine's ports and IP address, rather than running within an isolated Docker 
   network that's not visible to the outside world.
@@ -126,7 +128,7 @@ docker run --rm -it --network=host \
 
 Setting environment variables when starting a container allows you to manipulate the launch options of the server.
 
-For example, `docker run -e PASSWORD=1234 Apfelwurm/csgo-server:latest` will start a new server with password `1234` 
+For example, `docker run -it -e PASSWORD=1234 apfelwurm/csgo-get5-docker-dev:latest` will start a new server with password `1234` 
 by launching the server with `+sv_password 1234`. 
 
 All possible environment variables are displayed in the table below.
