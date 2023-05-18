@@ -60,6 +60,8 @@ else
 
     echo "Committing changes..."
     docker commit --change "LABEL csgo_version=$LATEST_CSGO_VERSION" csgo_update_container "$DOCKER_REPO:latest"
+    docker commit --change 'CMD ["bash", "server-launch.sh"]' csgo_update_container "$DOCKER_REPO:latest"
+
     docker image tag "$DOCKER_REPO:latest" "$DOCKER_REPO:$NEW_TAG"
 
     echo "Pushing to registry..."
