@@ -49,6 +49,7 @@ RUN apt-get -qq update \
         lib32gcc1 \
         ca-certificates \
         wget \
+        curl \
         lib32stdc++6 \
         unzip \
         rsync \
